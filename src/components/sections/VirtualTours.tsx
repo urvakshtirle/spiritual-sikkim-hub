@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Camera, Clock, Users, Star, MapPin, Box } from "lucide-react";
 import MonasteryModel from "@/components/3d/MonasteryModel";
 
+// Virtual Tours Component for Monastery360
+
 const VirtualTours = () => {
   const tours = [
     {
