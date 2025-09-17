@@ -15,7 +15,7 @@ const TravelPackages = () => {
       reviews: 127,
       groupSize: "2-8 people",
       category: "Best Seller",
-      image: "/api/placeholder/400/250",
+      image: "/assets/monastery-interior.jpg",
       highlights: [
         "Visit 5 major monasteries",
         "Traditional accommodation",
