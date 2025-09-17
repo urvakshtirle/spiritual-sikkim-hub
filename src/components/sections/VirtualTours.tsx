@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Camera, Clock, Users, Star, MapPin } from "lucide-react";
+import { Camera, Clock, Users, Star, MapPin, Box } from "lucide-react";
+import MonasteryModel from "@/components/3d/MonasteryModel";
 
 const VirtualTours = () => {
   const tours = [
@@ -60,6 +61,30 @@ const VirtualTours = () => {
             Step inside ancient monasteries from anywhere in the world. Experience the sacred atmosphere, 
             explore intricate details, and learn about centuries of spiritual tradition through cutting-edge technology.
           </p>
+        </div>
+
+        {/* Featured 3D Model */}
+        <div className="mb-16">
+          <div className="text-center mb-8">
+            <Badge className="mb-4 bg-monastery-gold/10 text-monastery-gold hover:bg-monastery-gold/20">
+              <Box className="w-3 h-3 mr-2" />
+              Interactive 3D Experience
+            </Badge>
+            <h3 className="text-2xl font-bold text-foreground mb-2">
+              Explore in Full 3D
+            </h3>
+            <p className="text-muted-foreground">
+              Interact with our detailed 3D monastery model. Click and drag to explore every angle.
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <MonasteryModel 
+              title="Sacred Architecture in 3D"
+              description="Click and drag to explore • Scroll to zoom • Interactive hotspots"
+              className="shadow-monastery"
+            />
+          </div>
         </div>
 
         {/* Tours Grid */}
