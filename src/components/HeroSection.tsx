@@ -42,19 +42,24 @@ const HeroSection = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-primary to-monastery-gold shadow-monastery hover:shadow-lg transition-[var(--transition-monastery)] group px-8"
+              className="ml-4 bg-gradient-to-r from-primary to-monastery-gold shadow-monastery hover:shadow-lg transition-[var(--transition-monastery)] group px-8"
+              asChild
             >
-              <Camera className="w-5 h-5 mr-2 group-hover:rotate-6 transition-transform" />
-              Start Virtual Tour
+              <a href="/tours">
+                <Camera className="w-5 h-5 mr-2 group-hover:rotate-6 transition-transform" />
+                Start Virtual Tour
+              </a>
             </Button>
             <Button 
               variant="outline" 
               size="lg" 
               className="border-primary/30 hover:border-primary hover:bg-primary/5 backdrop-blur-sm bg-card/80 px-8"
+              asChild
             >
-              <Play className="w-5 h-5 mr-2" />
-              Watch Preview
+              <a href="/packages">
+                <Play className="w-5 h-5 mr-2" />
+                Watch Preview
+              </a>
             </Button>
           </div>
 
