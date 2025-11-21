@@ -25,7 +25,7 @@ function Model({ url }: ModelProps) {
 
   return (
     <group ref={group}>
-      <primitive object={clonedScene} scale={1.5} position={[0, -1, 0]} />
+      <primitive object={clonedScene} scale={2.5} position={[0, -0.5, 0]} />
     </group>
   );
 }
@@ -42,11 +42,11 @@ const MonasteryModel = ({
   className = ""
 }: MonasteryModelProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [cameraPosition, setCameraPosition] = useState([0, 0, 5]);
+  const [cameraPosition, setCameraPosition] = useState([0, 0, 8]);
   const [isRotating, setIsRotating] = useState(true);
 
   const resetCamera = () => {
-    setCameraPosition([0, 0, 5]);
+    setCameraPosition([0, 0, 8]);
   };
 
   const zoomIn = () => {
@@ -107,19 +107,19 @@ const MonasteryModel = ({
             <PerspectiveCamera makeDefault position={cameraPosition as [number, number, number]} />
             
             {/* Lighting setup for monastery ambiance */}
-            <ambientLight intensity={0.4} color="#fff5e6" />
+            <ambientLight intensity={0.8} color="#fff5e6" />
             <directionalLight 
               position={[10, 10, 5]} 
-              intensity={1} 
+              intensity={1.5} 
               color="#ffd700" 
               castShadow 
             />
-            <pointLight position={[-10, 0, -20]} color="#ff6b35" intensity={0.3} />
+            <pointLight position={[-10, 0, -20]} color="#ff6b35" intensity={0.6} />
             <spotLight
               position={[0, 20, 0]}
               angle={0.3}
               penumbra={1}
-              intensity={0.5}
+              intensity={1}
               color="#ffd700"
               castShadow
             />
@@ -135,8 +135,8 @@ const MonasteryModel = ({
               enablePan={true}
               enableZoom={true}
               enableRotate={true}
-              minDistance={2}
-              maxDistance={10}
+              minDistance={4}
+              maxDistance={15}
               autoRotate={isRotating}
               autoRotateSpeed={2}
             />
