@@ -4,9 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Users, ArrowLeft, Star, Clock, MapPin, Languages, BookOpen, MessageCircle } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import { GuideBookingDialog } from "@/components/dialogs/GuideBookingDialog";
+import { useToast } from "@/hooks/use-toast";
 
 const GuidesPage = () => {
-  const [selectedGuide, setSelectedGuide] = useState<number | null>(null);
+  const [selectedGuide, setSelectedGuide] = useState<{ id: number; name: string; price: string } | null>(null);
+  const { toast } = useToast();
 
   const guides = [
     {
@@ -73,18 +76,25 @@ const GuidesPage = () => {
 
   const handleBookGuide = (guideId: number) => {
     const guide = guides.find(g => g.id === guideId);
-    setSelectedGuide(guideId);
-    alert(`Booking ${guide?.name}! They will contact you to schedule your monastery tour.`);
+    if (guide) {
+      setSelectedGuide({ id: guide.id, name: guide.name, price: guide.price });
+    }
   };
 
   const handleVirtualTour = (guideId: number) => {
     const guide = guides.find(g => g.id === guideId);
-    alert(`Starting virtual tour with ${guide?.name}! Connecting to video call...`);
+    toast({
+      title: "Starting Virtual Tour! 🎥",
+      description: `Connecting you with ${guide?.name} for a live video tour. Please check your email for the meeting link.`,
+    });
   };
 
   const handleMessage = (guideId: number) => {
     const guide = guides.find(g => g.id === guideId);
-    alert(`Opening chat with ${guide?.name}! Ask them about availability and tour preferences.`);
+    toast({
+      title: "Message Sent! 💬",
+      description: `Opening chat with ${guide?.name}. They'll respond within 24 hours.`,
+    });
   };
 
   return (
@@ -149,7 +159,7 @@ const GuidesPage = () => {
             <div className="grid lg:grid-cols-3 gap-8">
               {guides.map((guide) => (
                 <Card key={guide.id} className={`group hover:shadow-monastery transition-[var(--transition-monastery)] border-0 bg-card/80 backdrop-blur-sm overflow-hidden ${
-                  selectedGuide === guide.id ? 'ring-2 ring-primary' : ''
+                  selectedGuide?.id === guide.id ? 'ring-2 ring-primary' : ''
                 }`}>
                   <CardHeader className="text-center">
                     <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden">
@@ -217,7 +227,7 @@ const GuidesPage = () => {
                         className="w-full bg-gradient-to-r from-monastery-blue to-primary"
                         onClick={() => handleBookGuide(guide.id)}
                       >
-                        {selectedGuide === guide.id ? 'Selected!' : 'Book In-Person'}
+                        {selectedGuide?.id === guide.id ? 'Selected!' : 'Book In-Person'}
                       </Button>
                       <div className="grid grid-cols-2 gap-2">
                         <Button 
@@ -272,6 +282,13 @@ const GuidesPage = () => {
           </div>
         </section>
       </main>
+
+      <GuideBookingDialog
+        open={!!selectedGuide}
+        onOpenChange={(open) => !open && setSelectedGuide(null)}
+        guideName={selectedGuide?.name || ""}
+        guidePrice={selectedGuide?.price || ""}
+      />
     </div>
   );
 };

@@ -1,14 +1,19 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Camera, Clock, Users, Star, MapPin, Box, ArrowLeft, Play, Download } from "lucide-react";
 import MonasteryModel from "@/components/3d/MonasteryModel";
 import Navigation from "@/components/Navigation";
+import { TourBookingDialog } from "@/components/dialogs/TourBookingDialog";
+import { useToast } from "@/hooks/use-toast";
 import rumtekImage from "@/assets/rumtek-monastery.jpg";
 import pemayangtseImage from "@/assets/pemayangtse-monastery.jpg";
 import encheyImage from "@/assets/enchey-monastery.jpg";
 
 const VirtualTours = () => {
+  const [selectedTour, setSelectedTour] = useState<{ id: number; name: string } | null>(null);
+  const { toast } = useToast();
   const tours = [
     {
       id: 1,
@@ -49,13 +54,26 @@ const VirtualTours = () => {
   ];
 
   const handleStartTour = (tourId: number) => {
-    // In a real app, this would navigate to the specific tour
-    alert(`Starting virtual tour for ${tours.find(t => t.id === tourId)?.name}!`);
+    const tour = tours.find(t => t.id === tourId);
+    if (tour) {
+      setSelectedTour({ id: tour.id, name: tour.name });
+    }
   };
 
   const handleDownloadGuide = (tourId: number) => {
-    // In a real app, this would download the tour guide
-    alert(`Downloading offline guide for ${tours.find(t => t.id === tourId)?.name}!`);
+    const tour = tours.find(t => t.id === tourId);
+    toast({
+      title: "Download Started! 📥",
+      description: `Downloading offline guide for ${tour?.name}. Check your downloads folder.`,
+    });
+  };
+
+  const handlePreview = (tourId: number) => {
+    const tour = tours.find(t => t.id === tourId);
+    toast({
+      title: "Starting Preview 🎬",
+      description: `Loading preview for ${tour?.name}...`,
+    });
   };
 
   return (
@@ -195,7 +213,7 @@ const VirtualTours = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => alert(`Preview for ${tour.name}`)}
+                      onClick={() => handlePreview(tour.id)}
                     >
                       <Play className="w-4 h-4" />
                     </Button>
@@ -225,6 +243,13 @@ const VirtualTours = () => {
           </div>
         </section>
       </main>
+
+      <TourBookingDialog
+        open={!!selectedTour}
+        onOpenChange={(open) => !open && setSelectedTour(null)}
+        tourName={selectedTour?.name || ""}
+        tourId={selectedTour?.id || 0}
+      />
     </div>
   );
 };

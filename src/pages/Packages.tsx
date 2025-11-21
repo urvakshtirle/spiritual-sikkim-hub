@@ -4,9 +4,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Package, Calendar, MapPin, Users, Star, Check, Plane, Hotel, Camera, Utensils, ArrowLeft, Heart, Phone } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import { PackageBookingDialog } from "@/components/dialogs/PackageBookingDialog";
+import { useToast } from "@/hooks/use-toast";
 
 const TravelPackagesPage = () => {
-  const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<{ id: number; name: string; price: string } | null>(null);
+  const { toast } = useToast();
 
   const packages = [
     {
@@ -96,22 +99,32 @@ const TravelPackagesPage = () => {
 
   const handleBookPackage = (packageId: number) => {
     const pkg = packages.find(p => p.id === packageId);
-    setSelectedPackage(packageId);
-    alert(`Booking ${pkg?.name}! Our travel expert will contact you shortly.`);
+    if (pkg) {
+      setSelectedPackage({ id: pkg.id, name: pkg.name, price: pkg.price });
+    }
   };
 
   const handleCustomizePackage = (packageId: number) => {
     const pkg = packages.find(p => p.id === packageId);
-    alert(`Customizing ${pkg?.name}! Let us know your preferences and we'll tailor it for you.`);
+    toast({
+      title: "Customization Available! ✨",
+      description: `We'll customize ${pkg?.name} to match your preferences. A travel expert will contact you soon.`,
+    });
   };
 
   const handleContactExpert = () => {
-    alert("Connecting you with our Sikkim travel expert! They'll help create your perfect monastery journey.");
+    toast({
+      title: "Expert on the Way! 📞",
+      description: "Our Sikkim travel expert will call you within 2 hours to discuss your monastery journey.",
+    });
   };
 
   const handleViewDetails = (packageId: number) => {
     const pkg = packages.find(p => p.id === packageId);
-    alert(`Viewing detailed itinerary for ${pkg?.name} including daily activities, accommodations, and inclusions.`);
+    toast({
+      title: "Loading Details... 📋",
+      description: `Viewing complete itinerary for ${pkg?.name} with daily schedule and inclusions.`,
+    });
   };
 
   return (
@@ -168,7 +181,7 @@ const TravelPackagesPage = () => {
             <div className="grid lg:grid-cols-3 gap-8 mb-16">
               {packages.map((pkg) => (
                 <Card key={pkg.id} className={`group hover:shadow-monastery transition-[var(--transition-monastery)] border-0 bg-card/80 backdrop-blur-sm overflow-hidden relative ${
-                  selectedPackage === pkg.id ? 'ring-2 ring-primary' : ''
+                  selectedPackage?.id === pkg.id ? 'ring-2 ring-primary' : ''
                 }`}>
                   {pkg.category && (
                     <div className="absolute top-4 left-4 z-10">
@@ -254,7 +267,7 @@ const TravelPackagesPage = () => {
                       className="w-full bg-gradient-to-r from-monastery-gold to-primary hover:shadow-lg transition-[var(--transition-monastery)]"
                       onClick={() => handleBookPackage(pkg.id)}
                     >
-                      {selectedPackage === pkg.id ? 'Selected!' : 'Book Now'}
+                      {selectedPackage?.id === pkg.id ? 'Selected!' : 'Book Now'}
                     </Button>
                     <div className="grid grid-cols-2 gap-2">
                       <Button 
@@ -328,6 +341,13 @@ const TravelPackagesPage = () => {
           </div>
         </section>
       </main>
+
+      <PackageBookingDialog
+        open={!!selectedPackage}
+        onOpenChange={(open) => !open && setSelectedPackage(null)}
+        packageName={selectedPackage?.name || ""}
+        packagePrice={selectedPackage?.price || ""}
+      />
     </div>
   );
 };
