@@ -21,7 +21,7 @@ const Navigation = () => {
     { name: "Home", href: "/", icon: Mountain },
     { name: "Virtual Tours", href: "/tours", icon: Camera },
     { name: "Interactive Map", href: "/map", icon: Map },
-    { name: "Digital Archives", href: "/archives", icon: Archive },
+    { name: "Digital Archives", href: "/community", icon: Archive },
     { name: "Cultural Calendar", href: "/calendar", icon: Calendar },
     { name: "Travel Packages", href: "/packages", icon: Package },
     { name: "AI Food Guide", href: "/food", icon: UtensilsCrossed },
