@@ -4,9 +4,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Heart, ArrowLeft, Upload, Camera, BookOpen, Users, Share2, MessageCircle } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import { ContributionDialog } from "@/components/dialogs/ContributionDialog";
+import { useToast } from "@/hooks/use-toast";
 
 const CommunityPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>("photos");
+  const [contributionDialogOpen, setContributionDialogOpen] = useState(false);
+  const [contributionType, setContributionType] = useState<"photo" | "story" | "manuscript">("photo");
+  const { toast } = useToast();
 
   const contributions = [
     {
@@ -74,20 +79,30 @@ const CommunityPage = () => {
     { id: "manuscripts", label: "Manuscripts", icon: Upload }
   ];
 
-  const handleContribute = (type: string) => {
-    alert(`Opening contribution form for ${type}! Share your cultural heritage with the community.`);
+  const handleContribute = (type: "photo" | "story" | "manuscript") => {
+    setContributionType(type);
+    setContributionDialogOpen(true);
   };
 
   const handleLike = (contributionId: number) => {
-    alert(`Liked contribution #${contributionId}! Thank you for supporting the community.`);
+    toast({
+      title: "Liked! ❤️",
+      description: "Thank you for supporting the community!",
+    });
   };
 
   const handleComment = (contributionId: number) => {
-    alert(`Opening comments for contribution #${contributionId}. Share your thoughts and experiences!`);
+    toast({
+      title: "Comments Opening! 💬",
+      description: "Share your thoughts and experiences about this contribution.",
+    });
   };
 
   const handleShare = (contributionId: number) => {
-    alert(`Sharing contribution #${contributionId}! Help spread awareness of Sikkim's heritage.`);
+    toast({
+      title: "Shared! 🔗",
+      description: "Help spread awareness of Sikkim's monastery heritage!",
+    });
   };
 
   return (
@@ -282,6 +297,12 @@ const CommunityPage = () => {
           </div>
         </section>
       </main>
+
+      <ContributionDialog
+        open={contributionDialogOpen}
+        onOpenChange={setContributionDialogOpen}
+        contributionType={contributionType}
+      />
     </div>
   );
 };

@@ -4,9 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { UtensilsCrossed, ArrowLeft, MapPin, Star, Clock, Users, Camera, Smartphone } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import { useToast } from "@/hooks/use-toast";
 
 const FoodPage = () => {
   const [selectedCuisine, setSelectedCuisine] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const foodRecommendations = [
     {
@@ -65,12 +67,25 @@ const FoodPage = () => {
   ];
 
   const handleGetRecommendations = () => {
-    alert("AI analyzing your location and preferences... Finding the perfect local restaurants!");
+    toast({
+      title: "AI Analyzing... 🤖",
+      description: "Finding authentic restaurants near you based on your preferences and current location!",
+    });
   };
 
   const handleARPreview = (foodId: number) => {
     const food = foodRecommendations.find(f => f.id === foodId);
-    alert(`Opening AR preview for ${food?.name}! Point your camera to see the dish.`);
+    toast({
+      title: "AR Preview Loading! 📱",
+      description: `Point your camera to see ${food?.name} in augmented reality.`,
+    });
+  };
+
+  const handleFindRestaurants = (foodName: string) => {
+    toast({
+      title: "Finding Restaurants! 🍽️",
+      description: `Searching for authentic places serving ${foodName} near monastery locations.`,
+    });
   };
 
   return (
@@ -185,7 +200,7 @@ const FoodPage = () => {
 
                     <Button 
                       className="w-full bg-gradient-to-r from-monastery-gold to-primary"
-                      onClick={() => alert(`Finding restaurants serving ${food.name} near you!`)}
+                      onClick={() => handleFindRestaurants(food.name)}
                     >
                       Find Restaurants
                     </Button>

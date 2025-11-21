@@ -1,4 +1,4 @@
-import React, { Suspense, useRef, useState } from 'react';
+import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment, Html, PerspectiveCamera } from '@react-three/drei';
 import { Button } from '@/components/ui/button';
@@ -44,6 +44,7 @@ const MonasteryModel = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [cameraPosition, setCameraPosition] = useState([0, 0, 8]);
   const [isRotating, setIsRotating] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const resetCamera = () => {
     setCameraPosition([0, 0, 8]);
@@ -57,8 +58,33 @@ const MonasteryModel = ({
     setCameraPosition(prev => [prev[0], prev[1], Math.min(prev[2] + 1, 10)]);
   };
 
+  const toggleFullscreen = () => {
+    if (!containerRef.current) return;
+
+    if (!document.fullscreenElement) {
+      containerRef.current.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      }).catch((err) => {
+        console.error('Error attempting to enable fullscreen:', err);
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false);
+      });
+    }
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
   return (
-    <div className={`relative rounded-xl overflow-hidden bg-gradient-to-b from-background to-secondary/20 ${className}`}>
+    <div ref={containerRef} className={`relative rounded-xl overflow-hidden bg-gradient-to-b from-background to-secondary/20 ${isFullscreen ? 'fixed inset-0 z-50 rounded-none' : className}`}>
       {/* Header */}
       <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between">
         <div>
@@ -73,14 +99,15 @@ const MonasteryModel = ({
           variant="outline"
           size="sm"
           className="bg-background/80 backdrop-blur-sm border-border/50"
-          onClick={() => setIsFullscreen(!isFullscreen)}
+          onClick={toggleFullscreen}
         >
           <Maximize2 className="w-4 h-4" />
+          {isFullscreen ? ' Exit' : ' Fullscreen'}
         </Button>
       </div>
 
       {/* 3D Canvas */}
-      <div className="h-96 w-full">
+      <div className={isFullscreen ? "h-screen w-full" : "h-96 w-full"}>
         <Canvas
           camera={{ 
             position: cameraPosition as [number, number, number], 
